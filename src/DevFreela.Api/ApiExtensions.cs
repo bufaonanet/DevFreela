@@ -21,6 +21,9 @@ public static class ApiExtensions
             .AddFluentValidationClientsideAdapters();
 
         services.Configure<OpeningTimeOption>(configuration.GetSection("OpeningTime"));
+
+        services.AddHttpClient();
+        
         return services;
     }
 

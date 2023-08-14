@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using DevFreela.Application.Consumers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DevFreela.Application;
@@ -9,6 +10,9 @@ public static class ApplicationExtensions
     {
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
+        services.AddHostedService<PaymentApprovedConsumer>();
+        
         return services;
     }
 }
