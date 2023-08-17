@@ -2,6 +2,7 @@
 using System.Text.Json;
 using DevFreela.Core.IntegrationEvents;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
@@ -62,13 +63,13 @@ public class PaymentApprovedConsumer : BackgroundService
     private async Task FinishProject(int id)
     {
         using var scope = _serviceProvider.CreateScope();
-        var projectRepository = scope.ServiceProvider.GetRequiredService<IProjectRepository>();
+        var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-        var project = await projectRepository.GetByIdAsync(id);
+        var project = await unitOfWork.Projects.GetByIdAsync(id);
         if (project != null)
         {
             project.Finish();
-            await projectRepository.SaveChangesAsync();
+            await unitOfWork.CompleteAsync();
         }
     }
 }

@@ -10,11 +10,16 @@ public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand,
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IPaymentService _paymentService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public FinishProjectCommandHandler(IProjectRepository projectRepository, IPaymentService paymentService)
+    public FinishProjectCommandHandler(
+        IProjectRepository projectRepository, 
+        IPaymentService paymentService, 
+        IUnitOfWork unitOfWork)
     {
         _projectRepository = projectRepository;
         _paymentService = paymentService;
+        _unitOfWork = unitOfWork;
     }
 
 
@@ -35,7 +40,7 @@ public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand,
 
         project.SetPaymentPending();
 
-        await _projectRepository.SaveChangesAsync();
+        await _unitOfWork.CompleteAsync();
 
         return true;
     }

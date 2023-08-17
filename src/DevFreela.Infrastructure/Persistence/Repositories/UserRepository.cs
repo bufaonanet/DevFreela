@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User>? GetUserByEmailAndPasswordAsync(string email, string passwordHash)
+    public async Task<User> GetUserByEmailAndPasswordAsync(string email, string passwordHash)
     {
         var user = await _dbContext.Users
             .SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
@@ -29,11 +29,5 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         await _dbContext.Users.AddAsync(user);
-        await SaveChangesAsync();
-    }
-
-    public async Task SaveChangesAsync()
-    {
-        await _dbContext.SaveChangesAsync();
     }
 }

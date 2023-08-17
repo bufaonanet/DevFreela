@@ -25,12 +25,10 @@ public class ProjectsController : ControllerBase
 
     // api/projects?query=net core
     [HttpGet]
-    [Authorize(Roles = "client, freelancer")]
-    public async Task<IActionResult> Get(string query)
+    //[Authorize(Roles = "client, freelancer")]
+    public async Task<IActionResult> Get([FromQuery] GetAllProjectsQuery query)
     {
-        var getAllProjectsQuery = new GetAllProjectsQuery(query);
-
-        var projects = await _mediator.Send(getAllProjectsQuery);
+        var projects = await _mediator.Send(query);
 
         return Ok(projects);
     }
@@ -53,7 +51,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "client")]
+    //[Authorize(Roles = "client")]
     public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
         var id = await _mediator.Send(command);
